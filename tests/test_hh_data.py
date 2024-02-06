@@ -12,3 +12,11 @@ def test_data():
     hh_api = HeadHunterData("Python")
     hh_api.get_data()
     assert len(hh_api.all) > 0
+
+
+def test_sorted_data():
+    v = HeadHunterData("Python")
+    v.get_data()
+    v.sort_by_area('Казань')
+
+    assert len(v.sorted_list) > 0
