@@ -2,12 +2,38 @@ from src.hh_data import HeadHunterData
 from src.vacancy import Vacancy
 
 
-def filter_vacancies(vacancies_list, filter_words):
-    pass
+def get_vacancies_by_salary(vacancies_list, salary_from):
+    ranged_vacancies = []
+
+    for vac_dict in vacancies_list:
+        vacancy = Vacancy(vac_dict['name'])
+
+        vacancy.url = vac_dict['url']
+        vacancy.description = vac_dict['description']
+        vacancy.requirements = vac_dict['requirements']
+        vacancy.schedule = vac_dict['schedule']
+        vacancy.employment = vac_dict['employment']
+
+        if vac_dict['salary_from'] > 0:
+            vacancy.salary = vac_dict['salary_from']
+        elif vac_dict['salary_from'] == 0 and vac_dict['salary_to'] > 0:
+            vacancy.salary = vac_dict['salary_to']
+        else:
+            vacancy.salary = 0
+
+        if vacancy >= salary_from:
+            ranged_vacancies.append(vacancy)
+
+    return ranged_vacancies
 
 
-def get_vacancies_by_salary(filtered_vacancies, salary_range):
-    pass
+def get_top_vacancies(ranged_vacancies, num):
+    return ranged_vacancies[:num]
+
+
+def print_vacancies(top_vacancies):
+    for i in range(len(top_vacancies)):
+        print(top_vacancies[i])
 
 
 # Функция для взаимодействия с пользователем
@@ -21,18 +47,20 @@ def user_interaction():
     hh_api.save_sorted_vacancies()
 
     vacancies_list = Vacancy.cast_to_object_list(hh_vacancies)
+    print(vacancies_list)
 
     top_n = int(input("Введите количество вакансий для вывода в топ N: "))
 
-    filter_words = input("Введите ключевые слова для фильтрации вакансий (без запятых через пробел):\n"
-                         'Например: "Стажировка", "Полная занятость", "Стажер-программист", "Разбработчик"\n').split()
+    salary_from = int(input("Укажите зарплату, от какой суммы веси поиск:\n"))
 
-    salary_range = input("Введите диапазон зарплат: ")  # Пример: 100000 - 150000
+    ranged_vacancies = get_vacancies_by_salary(vacancies_list, salary_from)
 
-    filtered_vacancies = filter_vacancies(vacancies_list, filter_words)
+    ranged_vacancies.sort(key=lambda vacancy: vacancy.salary, reverse=True)
 
-    ranged_vacancies = get_vacancies_by_salary(filtered_vacancies, salary_range)
+    top_vacancies = get_top_vacancies(ranged_vacancies, top_n)
 
-    sorted_vacancies = sort_vacancies(ranged_vacancies)
-    top_vacancies = get_top_vacancies(sorted_vacancies, top_n)
     print_vacancies(top_vacancies)
+
+
+if __name__ == '__main__':
+    user_interaction()

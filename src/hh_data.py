@@ -63,7 +63,6 @@ class HeadHunterData(AbstractAPI):
         return self.sorted_list
 
 
-
 if __name__ == '__main__':
     # user_vacancy = input('Введите название вакансии или ключевое слово для поиска вакансий\n')
     hh_api = HeadHunterData('Python')
