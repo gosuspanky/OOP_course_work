@@ -1,9 +1,7 @@
-import json
-
-from config import DATA_DIR
-
-
 class Vacancy:
+    """
+    Класс Вакансии
+    """
 
     def __init__(self, name, url, salary_from, salary_to, description, requirements, schedule):
         self.name = name
@@ -51,6 +49,10 @@ class Vacancy:
             return self.salary == other
 
     def make_dict(self):
+        """
+        Метод преобразования данных вакансии в словарь
+        :return: готовый словарь
+        """
 
         vacancy_dict = {
             'name': self.name,
@@ -67,15 +69,20 @@ class Vacancy:
         return f'{__class__.__name__}({self.name})'
 
     def __str__(self):
-        return (f'vacancy_name: {self.name}\n'
-                f'possible_salary: {self.salary}\n'
-                f'work_format: {self.schedule}\n'
-                f'short_description: {self.description}\n'
-                f'short_requirements: {self.requirements}\n'
-                f'url: {self.url}\n')
+        return (f'Вакансия: {self.name}\n'
+                f'Возможная З/П: {self.salary}\n'
+                f'Формат работы: {self.schedule}\n'
+                f'Краткое описание: {self.description}\n'
+                f'Краткие требования: {self.requirements}\n'
+                f'url: {self.url}\n\n')
 
     @classmethod
     def cast_to_object_list(cls, sorted_list):
+        """
+        Классовый метод создания экземпляров класса Vacancy по получаемому списку словарей
+        :param sorted_list: список словарей вакансий
+        :return: список экземпляров класса Vacancy
+        """
         vacancies_list = []
 
         for i in range(len(sorted_list)):

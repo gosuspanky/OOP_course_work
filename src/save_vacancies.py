@@ -1,11 +1,11 @@
 import json
 from abc import ABC, abstractmethod
 
-from config import JSON_OUTPUT_DIR
-from src.vacancy import Vacancy
-
 
 class SaveData(ABC):
+    """
+    Абстрактный класс для сохранения данных в файл
+    """
 
     @abstractmethod
     def write_data(self, data):
@@ -13,6 +13,10 @@ class SaveData(ABC):
 
 
 class JSONSaver(SaveData):
+    """
+    Класс, сохраняющий данные в .json формате
+    на вход получаем путь до файла и данные для записи
+    """
 
     def __init__(self, file_path):
         self.file_path = file_path
@@ -23,11 +27,17 @@ class JSONSaver(SaveData):
             json.dump(empty_list, file)
 
     def write_data(self, data):
-        with open(self.file_path, 'a', encoding='utf-8') as file:
-            json.dump(data, file, ensure_ascii=False)
+        json_data = json.dumps(data, ensure_ascii=False)
+
+        with open(self.file_path, 'a', encoding='windows-1251') as file:
+            file.write(json_data)
 
 
 class TXTSaver(SaveData):
+    """
+    Класс, который сохраняет описание вакансий в .txt формате
+    на вход получаем путь до файла и данные для записи
+    """
 
     def __init__(self, file_path):
         self.file_path = file_path
@@ -38,20 +48,11 @@ class TXTSaver(SaveData):
             file.write(empty_str)
 
     def write_data(self, data):
-        with open(self.file_path, 'a', encoding='utf-8') as file:
+        with open(self.file_path, 'a', encoding='windows-1251') as file:
             for i in range(len(data)):
-                file.write(data[i])
+                vacancy = data[i]
+                file.write(vacancy.__str__())
 
 
 if __name__ == '__main__':
-    # vacancy_dict = {
-    #     'name': 'Питона разраб',
-    #     'possible_salary': 80_000,
-    #     'description': "self.description",
-    #     'requirements': "self.requirements",
-    #     'schedule': "self.schedule",
-    #     'url': "self.url"
-    # }
-    # saver = JSONSaver(JSON_OUTPUT_DIR)
-    # saver.write_data([vacancy_dict])
     pass

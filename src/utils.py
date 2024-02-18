@@ -5,6 +5,13 @@ from config import JSON_OUTPUT_DIR, TXT_OUTPUT_DIR
 
 
 def sort_by_area(vacancies, area: str):
+    """
+    Функция для фильтрации полученных данных с сайта по городу
+
+    :param vacancies: список словарей, полученных с сайта HH
+    :param area: вводимый пользователем город
+    :return: отсортированный список словарей по городу
+    """
     sorted_list = []
 
     for i in range(len(vacancies)):
@@ -14,6 +21,12 @@ def sort_by_area(vacancies, area: str):
 
 
 def get_vacancies_by_salary(vacancies_list, salary_from):
+    """
+    Функция сортировки по уровню желаемой З/П
+    :param vacancies_list: список экземпляров класса Vacancy
+    :param salary_from: сумма З/П вводимого пользователем
+    :return: отсортированный список
+    """
     ranged_vacancies = []
 
     for vacancy in vacancies_list:
@@ -25,23 +38,37 @@ def get_vacancies_by_salary(vacancies_list, salary_from):
 
 
 def get_top_vacancies(ranged_vacancies, num):
+    """
+    Функция для отсечения вакансий
+    :param ranged_vacancies: список вакансий
+    :param num: количество вакансий для вывода
+    :return: нужное количество вакансий
+    """
     return ranged_vacancies[:num]
 
 
 def print_vacancies(top_vacancies):
+    """
+    Функция вывода описания вакансий
+    :param top_vacancies: список вакансий
+    """
     for i in range(len(top_vacancies)):
         print(top_vacancies[i])
 
 
 # Функция для взаимодействия с пользователем
 def user_interaction():
+    """
+    Функция взаимодействия с пользователем
+    """
     while True:
         search_query = input("Введите поисковый запрос: ")
         print('Веду поиск, собираю данные...')
         hh_api = HeadHunterData(search_query)
         vacancies = hh_api.get_vacancies()
 
-        user_area = input('Введите город в котором ищите вакансию\n').title()
+        user_area = input('Введите город в котором ищите вакансию\n(на русском языке название города)').title()
+
         user_area_vacancies = sort_by_area(vacancies, user_area)
 
         vacancies_list = Vacancy.cast_to_object_list(user_area_vacancies)
@@ -56,13 +83,10 @@ def user_interaction():
 
         top_vacancies = get_top_vacancies(sorted_vacancies, top_n)
 
-        # for i in range(len(top_vacancies)):
-        #     print(top_vacancies[i].make_dict())
-        print_vacancies(top_vacancies)
-
         vacancies_list = []
         for i in range(len(top_vacancies)):
-            vacancy_dict = top_vacancies[i].make_dict
+            vacancy = top_vacancies[i]
+            vacancy_dict = vacancy.make_dict()
             vacancies_list.append(vacancy_dict)
 
         save_to_txt = TXTSaver(TXT_OUTPUT_DIR)
