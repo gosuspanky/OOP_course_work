@@ -62,5 +62,99 @@ def test_repr():
     assert vacancy.__repr__() == 'Vacancy(Питона девелопер)'
 
 
+vacancy_1 = {
+    'name': 'Питона разраб',
+    'alternate_url': 'ссылка',
+    'salary': {
+        'from': 20,
+        'to': 30
+    },
+    'snippet': {
+        'responsibility': 'описание',
+        'requirement': 'требование',
+
+    },
+    'schedule': {
+        'name': 'формат работы'
+    }
+}
+vacancy_2 = {
+    'name': 'Ява разраб',
+    'alternate_url': 'ссылка',
+    'salary': {
+        'from': None,
+        'to': 30
+    },
+    'snippet': {
+        'responsibility': 'описание',
+        'requirement': 'требование',
+
+    },
+    'schedule': {
+        'name': 'формат работы'
+    }
+}
+
+vacancy_3 = {
+    'name': 'сишарпа разраб',
+    'alternate_url': 'ссылка',
+    'salary': {
+        'from': 20,
+        'to': None
+    },
+    'snippet': {
+        'responsibility': 'описание',
+        'requirement': 'требование',
+
+    },
+    'schedule': {
+        'name': 'формат работы'
+    }
+}
+vacancy_4 = {
+    'name': 'сиплюплюса разраб',
+    'alternate_url': 'ссылка',
+    'salary': None,
+    'snippet': {
+        'responsibility': 'описание',
+        'requirement': 'требование',
+
+    },
+    'schedule': {
+        'name': 'формат работы'
+    }
+}
+
+unsorted_list_3 = [vacancy_1, vacancy_2, vacancy_3, vacancy_4]
+
+vac_list = Vacancy.cast_to_object_list(unsorted_list_3)
+
+
 def test_class_method():
-    pass
+    assert vac_list[0].salary == 20
+    assert vac_list[0].name == 'Питона разраб'
+    assert vac_list[0].url == 'ссылка'
+    assert vac_list[0].description == 'описание'
+    assert vac_list[0].requirements == 'требование'
+    assert vac_list[0].schedule == 'формат работы'
+
+    assert vac_list[1].salary == 30
+    assert vac_list[1].name == 'Ява разраб'
+    assert vac_list[1].url == 'ссылка'
+    assert vac_list[1].description == 'описание'
+    assert vac_list[1].requirements == 'требование'
+    assert vac_list[1].schedule == 'формат работы'
+
+    assert vac_list[2].salary == 20
+    assert vac_list[2].name == 'сишарпа разраб'
+    assert vac_list[2].url == 'ссылка'
+    assert vac_list[2].description == 'описание'
+    assert vac_list[2].requirements == 'требование'
+    assert vac_list[2].schedule == 'формат работы'
+
+    assert vac_list[3].salary == 0
+    assert vac_list[3].name == 'сиплюплюса разраб'
+    assert vac_list[3].url == 'ссылка'
+    assert vac_list[3].description == 'описание'
+    assert vac_list[3].requirements == 'требование'
+    assert vac_list[3].schedule == 'формат работы'
