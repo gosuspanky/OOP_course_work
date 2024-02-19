@@ -52,7 +52,3 @@ class TXTSaver(SaveData):
             for i in range(len(data)):
                 vacancy = data[i]
                 file.write(vacancy.__str__())
-
-
-if __name__ == '__main__':
-    pass

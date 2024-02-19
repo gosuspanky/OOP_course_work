@@ -53,8 +53,3 @@ class HeadHunterData(AbstractAPI):
             self.all_list.extend(data['items'])
 
         return self.all_list
-
-
-if __name__ == '__main__':
-    pass
-

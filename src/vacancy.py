@@ -113,7 +113,3 @@ class Vacancy:
             vacancies_list.append(vacancy)
 
         return vacancies_list
-
-
-if __name__ == '__main__':
-    pass
