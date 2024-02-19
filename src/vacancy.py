@@ -18,6 +18,24 @@ class Vacancy:
         else:
             self.salary = 0
 
+    def __gt__(self, other):
+        if isinstance(other, Vacancy):
+            return self.salary > other.salary
+        else:
+            return self.salary > other
+
+    def __lt__(self, other):
+        if isinstance(other, Vacancy):
+            return self.salary < other.salary
+        else:
+            return self.salary < other
+
+    def __eq__(self, other):
+        if isinstance(other, Vacancy):
+            return self.salary == other.salary
+        else:
+            return self.salary == other
+
     def __ge__(self, other):
         if isinstance(other, Vacancy):
             return self.salary >= other.salary

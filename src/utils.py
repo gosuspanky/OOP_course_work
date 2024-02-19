@@ -67,21 +67,25 @@ def user_interaction():
         hh_api = HeadHunterData(search_query)
         vacancies = hh_api.get_vacancies()
 
-        user_area = input('Введите город в котором ищите вакансию\n(на русском языке название города)').title()
+        user_area = input('Введите город в котором ищите вакансию\n'
+                          '(на русском языке название города)\n'
+                          '(Если введете город не верно, то список вакансий будет пустым)\n').title()
 
-        user_area_vacancies = sort_by_area(vacancies, user_area)
+        user_area_vacancies = sort_by_area(vacancies, user_area)  # сортируем по городу
 
-        vacancies_list = Vacancy.cast_to_object_list(user_area_vacancies)
+        vacancies_list = Vacancy.cast_to_object_list(user_area_vacancies)  # создаем список экземпляров класса
 
-        user_salary = int(input("Укажите зарплату, от какой суммы вести поиск:\n"))
+        try:
+            user_salary = int(input("Укажите зарплату, от какой суммы вести поиск:\n"))
+            top_n = int(input("Введите количество вакансий для вывода в топ N:\n"))
+        except ValueError:
+            raise ValueError('Ошибка значения! Введенное значение не является числом, перезапустите программу!')
 
-        top_n = int(input("Введите количество вакансий для вывода в топ N:\n"))
+        ranged_vacancies = get_vacancies_by_salary(vacancies_list, user_salary)  # фильтруем по желаемой зп
 
-        ranged_vacancies = get_vacancies_by_salary(vacancies_list, user_salary)
+        sorted_vacancies = sorted(ranged_vacancies, reverse=True)  # сортируем полученный список
 
-        sorted_vacancies = sorted(ranged_vacancies, reverse=True)
-
-        top_vacancies = get_top_vacancies(sorted_vacancies, top_n)
+        top_vacancies = get_top_vacancies(sorted_vacancies, top_n)  # отсекаем лишнее для вывода топа
 
         vacancies_list = []
         for i in range(len(top_vacancies)):
@@ -96,6 +100,10 @@ def user_interaction():
         user_input = input('Сохранить отсортированные вакансии в файле TXT? (д/н): ')
         if user_input == 'д':
             save_to_txt.write_data(top_vacancies)
+        elif user_input == 'н':
+            continue
+        else:
+            raise ValueError('Введено неверное значение, перезапустите программу')
 
         user_input = input('Продолжить работу с программой? (д/н): ').lower()
         if user_input == 'д':
@@ -105,9 +113,13 @@ def user_interaction():
                 save_to_txt.delete_data()
             elif user_input == 'н':
                 continue
+            else:
+                raise ValueError('Введено неверное значение, перезапустите программу')
             continue
         elif user_input == 'н':
             break
+        else:
+            raise ValueError('Введено неверное значение, перезапустите программу')
 
 
 if __name__ == '__main__':
